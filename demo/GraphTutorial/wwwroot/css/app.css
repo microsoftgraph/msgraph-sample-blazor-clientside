@@ -136,6 +136,12 @@ app {
     top: 0.5rem;
 }
 
+/* <CssSnippet> */
+.nav-profile-photo {
+    width: 36px;
+}
+/* <CssSnippet> */
+
 @media (max-width: 767.98px) {
     .main .top-row:not(.auth) {
         display: none;
