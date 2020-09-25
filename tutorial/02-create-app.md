@@ -64,7 +64,38 @@ In this section you will create the basic UI structure of the application.
 
 1. Open **./Shared/LoginDisplay.razor** and replace its contents with the following.
 
-    :::code language="razor" source="../demo/GraphTutorial/Shared/LoginDisplay.razor" id="LoginDisplaySnippet":::
+    ```razor
+    @using Microsoft.AspNetCore.Components.Authorization
+    @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+    @inject NavigationManager Navigation
+    @inject SignOutSessionStateManager SignOutManager
+
+    <AuthorizeView>
+        <Authorized>
+            <a class="text-decoration-none" data-toggle="dropdown" href="#" role="button">
+                <img src="/img/no-profile-photo.png" class="nav-profile-photo rounded-circle align-self-center mr-2">
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <h5 class="dropdown-item-text mb-0">@context.User.Identity.Name</h5>
+                <p class="dropdown-item-text text-muted mb-0">placeholder@contoso.com</p>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" @onclick="BeginLogout">Log out</button>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <a href="authentication/login">Log in</a>
+        </NotAuthorized>
+    </AuthorizeView>
+
+    @code{
+        private async Task BeginLogout(MouseEventArgs args)
+        {
+            await SignOutManager.SetSignOutState();
+            Navigation.NavigateTo("authentication/logout");
+        }
+    }
+    ```
 
 1. Create a new directory in the **./wwwroot** directory named **img**. Add an image file of your choosing named **no-profile-photo.png** in this directory. This image will be used as the user's photo when the user has no photo in Microsoft Graph.
 
