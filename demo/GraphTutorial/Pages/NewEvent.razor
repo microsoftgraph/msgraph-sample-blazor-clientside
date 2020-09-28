@@ -1,6 +1,7 @@
 <!-- Copyright (c) Microsoft Corporation.
      Licensed under the MIT license. -->
 
+<!-- <NewEventFormSnippet> -->
 @page "/newevent"
 @using Microsoft.Graph
 
@@ -48,6 +49,9 @@
     </NotAuthorized>
 </AuthorizeView>
 
+<!-- </NewEventFormSnippet> -->
+
+<!-- <NewEventCodeSnippet> -->
 @code{
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
@@ -63,6 +67,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Get the user's time zone
         var user = (await authenticationStateTask).User;
         userTimeZone = user.GetUserGraphTimeZone() ?? "UTC";
     }
@@ -135,3 +140,4 @@
         }
     }
 }
+<!-- </NewEventCodeSnippet> -->
