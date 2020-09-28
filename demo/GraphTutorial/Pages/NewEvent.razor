@@ -1,0 +1,143 @@
+<!-- Copyright (c) Microsoft Corporation.
+     Licensed under the MIT license. -->
+
+<!-- <NewEventFormSnippet> -->
+@page "/newevent"
+@using Microsoft.Graph
+
+@inject GraphTutorial.Graph.GraphClientFactory clientFactory
+
+<AuthorizeView>
+    <Authorized>
+        @if (!string.IsNullOrEmpty(status))
+        {
+            <div class="alert @(isError ? "alert-danger" : "alert-success")">@status</div>
+        }
+        <form>
+            <div class="form-group">
+                <label>Subject</label>
+                <input @bind="subject" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Attendees</label>
+                <input @bind="attendees" class="form-control" />
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Start</label>
+                        <input @bind="start" type="datetime" class="form-control" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>End</label>
+                        <input @bind="end" type="datetime" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Body</label>
+                <textarea @bind="body" class="form-control"></textarea>
+            </div>
+        </form>
+        <button class="btn btn-primary mr-2" @onclick="CreateEvent">Create</button>
+        <a href="/calendar" class="btn btn-secondrary">Cancel</a>
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
+
+<!-- </NewEventFormSnippet> -->
+
+<!-- <NewEventCodeSnippet> -->
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private string status;
+    private bool isError;
+    private string userTimeZone;
+    private string subject;
+    private string attendees;
+    private DateTime start = new DateTime(DateTime.Today.Ticks);
+    private DateTime end = new DateTime(DateTime.Today.Ticks);
+    private string body;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the user's time zone
+        var user = (await authenticationStateTask).User;
+        userTimeZone = user.GetUserGraphTimeZone() ?? "UTC";
+    }
+
+    private async Task CreateEvent()
+    {
+        // Initalize an Event object
+        // with user input
+        var newEvent = new Event
+        {
+            Subject = subject,
+            Start = new DateTimeTimeZone
+            {
+                DateTime = start.ToString("o"),
+                TimeZone = userTimeZone
+            },
+            End = new DateTimeTimeZone
+            {
+                DateTime = end.ToString("o"),
+                TimeZone = userTimeZone
+            },
+            Body = new ItemBody
+            {
+                Content = body,
+                ContentType = BodyType.Text
+            }
+        };
+
+        // If the user provided attendees (semicolon-delimited
+        // list of email addresses) add them
+        if (!string.IsNullOrEmpty(attendees))
+        {
+            var attendeeList = new List<Attendee>();
+
+            var attendeeArray = attendees.Split(";");
+            foreach (var email in attendeeArray)
+            {
+                Console.WriteLine($"Adding {email}");
+                attendeeList.Add(new Attendee
+                {
+                    // Set to required attendee
+                    Type = AttendeeType.Required,
+                    EmailAddress = new EmailAddress
+                    {
+                        Address = email
+                    }
+                });
+            }
+
+            newEvent.Attendees = attendeeList;
+        }
+
+        var graphClient = clientFactory.GetAuthenticatedClient();
+
+        try
+        {
+            // POST /me/events
+            await graphClient.Me
+                .Events
+                .Request()
+                .AddAsync(newEvent);
+
+            isError = false;
+            status = "Event created";
+        }
+        catch (ServiceException exception)
+        {
+            isError = true;
+            status = exception.Message;
+        }
+    }
+}
+<!-- </NewEventCodeSnippet> -->
