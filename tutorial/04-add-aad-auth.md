@@ -2,7 +2,7 @@
 
 In this exercise you will extend the application from the previous exercise to support authentication with Azure AD. This is required to obtain the necessary OAuth access token to call the Microsoft Graph API.
 
-1. Open **./wwwroot/appsettings.json** and update the `Authority` and `ClientId` values to match the following.
+1. Open **./wwwroot/appsettings.json**. Add a `GraphScopes` property and update the `Authority` and `ClientId` values to match the following.
 
     :::code language="json" source="../demo/GraphTutorial/wwwroot/appsettings.example.json" highlight="3-4,7":::
 

@@ -20,4 +20,4 @@ In this section you will add the ability to create events on the user's calendar
 
 1. Save all of your changes and restart the app. On the **Calendar** page, select **New event**. Fill in the form and choose **Create**.
 
-    ![A screenshot of the new event form](image/create-event.png)
+    ![A screenshot of the new event form](images/create-event.png)

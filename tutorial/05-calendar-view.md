@@ -55,7 +55,7 @@ Now you can replace the JSON dump with something more user-friendly.
 
 1. Add the following function inside the `@code{}` section.
 
-    :::code language="razor" source="../demo/GraphTutorial/Pages/Calendar.razor" id="FormatDateSnippet":::
+    :::code language="csharp" source="../demo/GraphTutorial/Pages/Calendar.razor" id="FormatDateSnippet":::
 
     This code takes an ISO 8601 date string and converts it into the user's preferred date and time format.
 
