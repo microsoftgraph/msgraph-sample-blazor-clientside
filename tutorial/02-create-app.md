@@ -26,11 +26,13 @@ Start by creating a Blazor WebAssembly app.
 Before moving on, install some additional NuGet packages that you will use later.
 
 - [Microsoft.Graph](https://www.nuget.org/packages/Microsoft.Graph/) for making calls to Microsoft Graph.
+- [TimeZoneConverter](https://github.com/mj1856/TimeZoneConverter) for translating Windows time zone identifiers to IANA identifiers.
 
 1. Run the following commands in your CLI to install the dependencies.
 
     ```Shell
     dotnet add package Microsoft.Graph --version 3.14.0
+    dotnet add package TimeZoneConverter
     ```
 
 ## Design the app
