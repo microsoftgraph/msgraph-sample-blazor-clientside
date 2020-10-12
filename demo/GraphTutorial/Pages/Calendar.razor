@@ -97,17 +97,8 @@
     private DateTime GetUtcStartOfWeekInTimeZone(DateTime today, string timeZoneId)
     {
         // Time zone returned by Graph could be Windows or IANA style
-        // WASM's implementation of FindSystemTimeZoneById needs IANA,
-        // so handle both
-        TimeZoneInfo userTimeZone;
-        if (TZConvert.TryWindowsToIana(timeZoneId, out var ianaTimeZone))
-        {
-            userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(ianaTimeZone);
-        }
-        else
-        {
-            userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-        }
+        // TimeZoneConverter can take either
+        TimeZoneInfo userTimeZone = TZConvert.GetTimeZoneInfo(timeZoneId);
 
         // Assumes Sunday as first day of week
         int diff = System.DayOfWeek.Sunday - today.DayOfWeek;
