@@ -184,12 +184,13 @@ Once the user is logged in, you can get their information from Microsoft Graph. 
 
 1. Open **./Shared/LoginDisplay.razor** and make the following changes.
 
-    - Replace `/img/no-profile-photo.png` with `@context.User.GetUserGraphPhoto()`.
+    - Replace `/img/no-profile-photo.png` with `@(context.User.GetUserGraphPhoto() ?? "/img/no-profile-photo.png")`.
     - Replace `placeholder@contoso.com` with `@context.User.GetUserGraphEmail()`.
 
     ```razor
     ...
-    <img src="@context.User.GetUserGraphPhoto()" class="nav-profile-photo rounded-circle align-self-center mr-2">
+    <img src="@(context.User.GetUserGraphPhoto() ?? "/img/no-profile-photo.png")"
+         class="nav-profile-photo rounded-circle align-self-center mr-2">
 
     ...
 
