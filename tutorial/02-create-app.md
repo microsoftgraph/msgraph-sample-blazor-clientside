@@ -31,7 +31,7 @@ Before moving on, install some additional NuGet packages that you will use later
 1. Run the following commands in your CLI to install the dependencies.
 
     ```Shell
-    dotnet add package Microsoft.Graph --version 3.14.0
+    dotnet add package Microsoft.Graph --version 3.18.0
     dotnet add package TimeZoneConverter
     ```
 
