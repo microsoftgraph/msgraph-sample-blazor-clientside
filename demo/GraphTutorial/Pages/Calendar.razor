@@ -22,9 +22,11 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(var calendarEvent in events)
+                @foreach (var calendarEvent in events)
                 {
                     <tr>
+
+
                         <td>@calendarEvent.Organizer.EmailAddress.Name</td>
                         <td>@calendarEvent.Subject</td>
                         <td>@FormatIso8601DateTime(calendarEvent.Start.DateTime)</td>
@@ -58,15 +60,15 @@
         dateTimeFormat = $"{user.GetUserGraphDateFormat()} {user.GetUserGraphTimeFormat()}";
 
         // Calculate the start and end of the current week in user's time zone
-        var startOfWeek = GetUtcStartOfWeekInTimeZone(DateTime.Today, graphTimeZone);
-        var endOfWeek = startOfWeek.AddDays(7);
+        var startOfWeek = GetUtcStartOfWeekInTimeZone(DateTime.Today.AddDays(-1), graphTimeZone);
+        var endOfWeek = startOfWeek.AddDays(2);
 
         graphClient = clientFactory.GetAuthenticatedClient();
 
         // Specifies the start and end of the view on the calendar
         // Translates to: ?startDateTime=""&endDateTime=""
         var viewOptions = new List<QueryOption>
-        {
+    {
             new QueryOption("startDateTime", startOfWeek.ToString("o")),
             new QueryOption("endDateTime", endOfWeek.ToString("o"))
         };
@@ -117,10 +119,11 @@
         // Load into a DateTime
         var dateTime = DateTime.Parse(iso8601DateTime);
 
-        if (dateTime != null)
+        if (dateTime != null && dateTimeFormat != null)
         {
             // Format it using the user's settings
-            return dateTime.ToString(dateTimeFormat);
+         //   return dateTime.ToString(dateTimeFormat);
+            return iso8601DateTime;
         }
 
         // Fallback to return original value
