@@ -117,7 +117,7 @@
         // Load into a DateTime
         var dateTime = DateTime.Parse(iso8601DateTime);
 
-        if (dateTime != null)
+        if (!string.IsNullOrWhiteSpace(dateTimeFormat))
         {
             // Format it using the user's settings
             return dateTime.ToString(dateTimeFormat);
