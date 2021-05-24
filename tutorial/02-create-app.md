@@ -19,7 +19,7 @@ Start by creating a Blazor WebAssembly app.
 1. Open your browser and browse to `https://localhost:5001`. If everything is working, you should see a "Hello, world!" message.
 
 > [!IMPORTANT]
-> If you receive a warning that the certificate for **localhost** is un-trusted you can use the .NET Core CLI to install and trust the development certificate. See [Enforce HTTPS in ASP.NET Core](/aspnet/core/security/enforcing-ssl?view=aspnetcore-3.1) for instructions for specific operating systems.
+> If you receive a warning that the certificate for **localhost** is un-trusted you can use the .NET Core CLI to install and trust the development certificate. See [Enforce HTTPS in ASP.NET Core](/aspnet/core/security/enforcing-ssl) for instructions for specific operating systems.
 
 ## Add NuGet packages
 
@@ -31,7 +31,7 @@ Before moving on, install some additional NuGet packages that you will use later
 1. Run the following commands in your CLI to install the dependencies.
 
     ```Shell
-    dotnet add package Microsoft.Graph --version 3.18.0
+    dotnet add package Microsoft.Graph --version 4.0.0
     dotnet add package TimeZoneConverter
     ```
 
