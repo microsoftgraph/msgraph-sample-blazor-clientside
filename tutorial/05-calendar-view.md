@@ -1,3 +1,7 @@
+---
+ms.localizationpriority: medium
+---
+
 <!-- markdownlint-disable MD002 MD041 -->
 
 In this section you will further incorporate Microsoft Graph into the application to get a view of the user's calendar for the current week.
