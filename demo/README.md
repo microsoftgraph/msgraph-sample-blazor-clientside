@@ -4,7 +4,7 @@
 
 To run the completed project in this folder, you need the following:
 
-- The [.NET Core SDK](https://dotnet.microsoft.com/download) installed on your development machine. (**Note:** This tutorial was written with .NET Core SDK version 3.1.402. The steps in this guide may work with other versions, but that has not been tested.)
+- The [.NET SDK](https://dotnet.microsoft.com/download) installed on your development machine. (**Note:** This tutorial was written with .NET SDK version 5.0.302. The steps in this guide may work with other versions, but that has not been tested.)
 - Either a personal Microsoft account with a mailbox on Outlook.com, or a Microsoft work or school account.
 
 If you don't have a Microsoft account, there are a couple of options to get a free account:
@@ -24,15 +24,13 @@ If you don't have a Microsoft account, there are a couple of options to get a fr
 
     - Set **Name** to `Blazor Graph Tutorial`.
     - Set **Supported account types** to **Accounts in any organizational directory and personal Microsoft accounts**.
-    - Under **Redirect URI**, set the first drop-down to `Web` and set the value to `https://localhost:5001/authentication/login-callback`.
+    - Under **Redirect URI**, set the first drop-down to **Single-page application (SPA)** and set the value to `https://localhost:5001/authentication/login-callback`.
 
     ![A screenshot of the Register an application page](../tutorial/images/aad-register-an-app.png)
 
 1. Select **Register**. On the **Blazor Graph Tutorial** page, copy the value of the **Application (client) ID** and save it, you will need it in the next step.
 
     ![A screenshot of the application ID of the new app registration](../tutorial/images/aad-application-id.png)
-
-1. Select **Authentication** under **Manage**. Locate the **Implicit grant** section and enable **Access tokens** and **ID tokens**. Select **Save**.
 
 ## Configure the sample
 
