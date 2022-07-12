@@ -1,0 +1,33 @@
+﻿<!-- Copyright (c) Microsoft Corporation.
+     Licensed under the MIT license. -->
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+
+<AuthorizeView>
+    <Authorized>
+        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+            <img src="@(context.User.GetUserGraphPhoto() ?? "/img/no-profile-photo.png")" class="nav-profile-photo rounded-circle align-self-center mr-2">
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+            <h5 class="dropdown-item-text mb-0">@context?.User?.Identity?.Name</h5>
+            <p class="dropdown-item-text text-muted mb-0">@context?.User?.GetUserGraphEmail()</p>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" @onclick="BeginLogout">Log out</button>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <a href="authentication/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+    private async Task BeginLogout(MouseEventArgs args)
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+}
