@@ -3,6 +3,9 @@
     "blazorwasm"
   ],
   "cSpell.words": [
-    "Msal"
+    "appsettings",
+    "dotnetcli",
+    "Msal",
+    "wwwroot"
   ]
 }
