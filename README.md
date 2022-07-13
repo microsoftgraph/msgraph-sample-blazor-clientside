@@ -1,3 +1,16 @@
+---
+page_type: sample
+description: This sample demonstrates how to use the Microsoft Graph .NET SDK to access data in Office 365 from Azure Functions.
+products:
+- ms-graph
+- microsoft-graph-mail-api
+- microsoft-graph-change-notifications-api
+- office-exchange-online
+- blazor
+languages:
+- csharp
+---
+
 # Microsoft Graph sample Blazor WebAssembly app
 
 This sample demonstrates how to use the Microsoft Graph .NET SDK to access data in Office 365 from Blazor WebAssembly apps.
