@@ -3,8 +3,7 @@ page_type: sample
 description: This sample demonstrates how to use the Microsoft Graph .NET SDK to access data in Office 365 from Blazor WebAssembly apps.
 products:
 - ms-graph
-- microsoft-graph-mail-api
-- microsoft-graph-change-notifications-api
+- microsoft-graph-calendar-api
 - office-exchange-online
 - blazor
 languages:
