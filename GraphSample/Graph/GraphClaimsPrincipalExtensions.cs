@@ -30,10 +30,10 @@ namespace GraphSample
             return claim == null ? string.Empty : claim.Value;
         }
 
-        public static string GetUserGraphPhoto(this ClaimsPrincipal claimsPrincipal)
+        public static string? GetUserGraphPhoto(this ClaimsPrincipal claimsPrincipal)
         {
             var claim = claimsPrincipal.FindFirst(GraphClaimTypes.Photo);
-            return claim == null ? string.Empty : claim.Value;
+            return claim == null ? null : claim.Value;
         }
 
         public static string GetUserGraphTimeZone(this ClaimsPrincipal claimsPrincipal)
