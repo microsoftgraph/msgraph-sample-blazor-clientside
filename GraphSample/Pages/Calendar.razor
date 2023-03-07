@@ -2,7 +2,9 @@
      Licensed under the MIT license. -->
 
 @page "/calendar"
+@using System.Security.Authentication
 @using Microsoft.Graph
+@using Microsoft.Graph.Models
 @using TimeZoneConverter
 
 @inject GraphSample.Graph.GraphClientFactory clientFactory
@@ -24,10 +26,10 @@
                 @foreach(var calendarEvent in events)
                 {
                     <tr>
-                        <td>@calendarEvent.Organizer.EmailAddress.Name</td>
-                        <td>@calendarEvent.Subject</td>
-                        <td>@FormatIso8601DateTime(calendarEvent.Start.DateTime)</td>
-                        <td>@FormatIso8601DateTime(calendarEvent.End.DateTime)</td>
+                        <td>@calendarEvent?.Organizer?.EmailAddress?.Name</td>
+                        <td>@calendarEvent?.Subject</td>
+                        <td>@FormatIso8601DateTime(calendarEvent?.Start?.DateTime)</td>
+                        <td>@FormatIso8601DateTime(calendarEvent?.End?.DateTime)</td>
                     </tr>
                 }
             </tbody>
@@ -50,10 +52,8 @@
     {
         if (authenticationStateTask == null)
         {
-            throw new AuthenticationException(new Error
-            {
-                Message = "Unable to access authentication state"
-            });
+            throw new AuthenticationException(
+                "Unable to access authentication state");
         }
 
         // Get the user
@@ -67,35 +67,26 @@
 
         graphClient = clientFactory.GetAuthenticatedClient();
 
-        // Specifies the start and end of the view on the calendar
-        // Translates to: ?startDateTime=""&endDateTime=""
-        var viewOptions = new List<QueryOption>
-        {
-            new QueryOption("startDateTime", startOfWeek.ToString("o")),
-            new QueryOption("endDateTime", endOfWeek.ToString("o"))
-        };
-
         var eventPage = await graphClient.Me
             .CalendarView
-            .Request(viewOptions)
-            // Send user time zone in request so date/time in
-            // response will be in preferred time zone
-            .Header("Prefer", $"outlook.timezone=\"{graphTimeZone}\"")
-            // Get max 50 per request
-            .Top(50)
-            // Only return fields app will use
-            .Select(e => new
+            .GetAsync(config =>
             {
-                e.Subject,
-                e.Organizer,
-                e.Start,
-                e.End
-            })
-            // Order results chronologically
-            .OrderBy("start/dateTime")
-            .GetAsync();
+                // Send user time zone in request so date/time in
+                // response will be in preferred time zone
+                config.Headers.Add("Prefer", $"outlook.timezone=\"{graphTimeZone}\"");
+                // Specifies the start and end of the view on the calendar
+                // Translates to: ?startDateTime=""&endDateTime=""
+                config.QueryParameters.StartDateTime = startOfWeek.ToString("o");
+                config.QueryParameters.EndDateTime = endOfWeek.ToString("o");
+                // Get max 50 per request
+                config.QueryParameters.Top = 50;
+                // Only return fields app will use
+                config.QueryParameters.Select = new [] { "subject", "organizer", "start", "end" };
+                // Order results chronologically
+                config.QueryParameters.Orderby = new [] { "start/dateTime" };
+            });
 
-        events = eventPage.CurrentPage;
+        events = eventPage?.Value ?? new List<Event>();
     }
 
     private DateTime GetUtcStartOfWeekInTimeZone(DateTime today, string timeZoneId)
@@ -114,8 +105,13 @@
         return TimeZoneInfo.ConvertTimeToUtc(unspecifiedStart, userTimeZone);
     }
 
-    private string FormatIso8601DateTime(string iso8601DateTime)
+    private string FormatIso8601DateTime(string? iso8601DateTime)
     {
+        if (string.IsNullOrEmpty(iso8601DateTime))
+        {
+            return string.Empty;
+        }
+
         // Load into a DateTime
         var dateTime = DateTime.Parse(iso8601DateTime);
 
