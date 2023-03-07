@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Graph;
+using Microsoft.Kiota.Http.HttpClientLibrary;
 
 namespace GraphSample.Graph
 {
@@ -29,10 +30,9 @@ namespace GraphSample.Graph
             {
                 // Create a GraphServiceClient using a scoped
                 // HttpClient
-                graphClient = new GraphServiceClient(httpClient);
-                // Configure the auth provider
-                graphClient.AuthenticationProvider =
-                    new BlazorAuthProvider(accessor);
+                var requestAdapter = new HttpClientRequestAdapter(
+                    new BlazorAuthProvider(accessor), null, null, httpClient);
+                graphClient = new GraphServiceClient(requestAdapter);
             }
 
             return graphClient;

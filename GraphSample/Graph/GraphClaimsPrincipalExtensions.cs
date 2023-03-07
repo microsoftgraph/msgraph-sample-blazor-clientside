@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-using Microsoft.Graph;
+using System.Security.Authentication;
 using System.Security.Claims;
+using Microsoft.Graph.Models;
 
 namespace GraphSample
 {
@@ -54,10 +55,8 @@ namespace GraphSample
             var identity = claimsPrincipal.Identity as ClaimsIdentity;
             if (identity == null)
             {
-                throw new AuthenticationException(new Error
-                {
-                    Message = "ClaimsIdentity is null inside provided ClaimsPrincipal"
-                });
+                throw new AuthenticationException(
+                    "ClaimsIdentity is null inside provided ClaimsPrincipal");
             }
 
             identity.AddClaim(
@@ -65,7 +64,7 @@ namespace GraphSample
                     user.MailboxSettings?.DateFormat ?? "MMMM dd, yyyy"));
             identity.AddClaim(
                 new Claim(GraphClaimTypes.Email,
-                    user.Mail ?? user.UserPrincipalName));
+                    user.Mail ?? user.UserPrincipalName ?? ""));
             identity.AddClaim(
                 new Claim(GraphClaimTypes.TimeZone,
                     user.MailboxSettings?.TimeZone ?? "UTC"));
@@ -75,15 +74,13 @@ namespace GraphSample
         }
 
         // Converts a photo Stream to a Data URI and stores it in a claim
-        public static void AddUserGraphPhoto(this ClaimsPrincipal claimsPrincipal, Stream photoStream)
+        public static void AddUserGraphPhoto(this ClaimsPrincipal claimsPrincipal, Stream? photoStream)
         {
             var identity = claimsPrincipal.Identity as ClaimsIdentity;
             if (identity == null)
             {
-                throw new AuthenticationException(new Error
-                {
-                    Message = "ClaimsIdentity is null inside provided ClaimsPrincipal"
-                });
+                throw new AuthenticationException(
+                    "ClaimsIdentity is null inside provided ClaimsPrincipal");
             }
 
             if (photoStream != null)

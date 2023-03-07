@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Graph;
+using Microsoft.Graph.Models.ODataErrors;
 
 namespace GraphSample.Graph
 {
@@ -67,17 +68,17 @@ namespace GraphSample.Graph
 
             // Get user profile including mailbox settings
             // GET /me?$select=displayName,mail,mailboxSettings,userPrincipalName
-            var user = await graphClient.Me
-                .Request()
+            var user = await graphClient.Me.GetAsync(config =>
+            {
                 // Request only the properties used to
                 // set claims
-                .Select(u => new {
-                    u.DisplayName,
-                    u.Mail,
-                    u.MailboxSettings,
-                    u.UserPrincipalName
-                })
-                .GetAsync();
+                config.QueryParameters.Select = new [] { "displayName", "mail", "mailboxSettings", "userPrincipalName" };
+            });
+
+            if (user == null)
+            {
+                throw new Exception("Could not retrieve user from Microsoft Graph.");
+            }
 
             logger.LogInformation($"Got user: {user.DisplayName}");
 
@@ -85,13 +86,23 @@ namespace GraphSample.Graph
 
             // Get user's photo
             // GET /me/photos/48x48/$value
-            var photo = await graphClient.Me
+            try
+            {
+                var photo = await graphClient.Me
                 .Photos["48x48"]  // Smallest standard size
                 .Content
-                .Request()
                 .GetAsync();
 
-            claimsPrincipal.AddUserGraphPhoto(photo);
+                claimsPrincipal.AddUserGraphPhoto(photo);
+            }
+            catch (ODataError err)
+            {
+                Console.WriteLine($"Photo error: ${err?.Error?.Code}");
+                if (err?.Error?.Code != "ImageNotFound")
+                {
+                    throw err ?? new Exception("Unknown error getting user photo.");
+                }
+            }
         }
     }
 }

@@ -2,7 +2,9 @@
      Licensed under the MIT license. -->
 
 @page "/newevent"
+@using System.Security.Authentication
 @using Microsoft.Graph
+@using Microsoft.Graph.Models
 
 @inject GraphSample.Graph.GraphClientFactory clientFactory
 
@@ -65,10 +67,8 @@
     {
         if (authenticationStateTask == null)
         {
-            throw new AuthenticationException(new Error
-            {
-                Message = "Unable to access authentication state"
-            });
+            throw new AuthenticationException(
+                "Unable to access authentication state");
         }
 
         // Get the user's time zone
@@ -131,8 +131,7 @@
             // POST /me/events
             await graphClient.Me
                 .Events
-                .Request()
-                .AddAsync(newEvent);
+                .PostAsync(newEvent);
 
             isError = false;
             status = "Event created";
