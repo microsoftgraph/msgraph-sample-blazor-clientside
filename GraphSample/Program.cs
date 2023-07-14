@@ -12,7 +12,8 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // HttpClient for passing into GraphServiceClient constructor
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://graph.microsoft.com") });
+builder.Services.AddScoped(
+    sp => new HttpClient { BaseAddress = new Uri("https://graph.microsoft.com/v1.0") });
 
 builder.Services.AddMsalAuthentication<RemoteAuthenticationState, RemoteUserAccount>(options =>
 {
@@ -23,7 +24,7 @@ builder.Services.AddMsalAuthentication<RemoteAuthenticationState, RemoteUserAcco
         scopes = "User.Read";
     }
 
-    foreach(var scope in scopes.Split(';'))
+    foreach (var scope in scopes.Split(';'))
     {
         Console.WriteLine($"Adding {scope} to requested permissions");
         options.ProviderOptions.DefaultAccessTokenScopes.Add(scope);
