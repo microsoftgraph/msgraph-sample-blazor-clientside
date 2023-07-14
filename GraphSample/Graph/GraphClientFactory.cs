@@ -28,6 +28,7 @@ namespace GraphSample.Graph
             // Use the existing one if it's there
             if (graphClient == null)
             {
+                logger.LogInformation("No Graph client already exists, creating new...");
                 // Create a GraphServiceClient using a scoped
                 // HttpClient
                 var requestAdapter = new HttpClientRequestAdapter(

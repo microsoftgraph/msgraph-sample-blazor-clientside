@@ -6,6 +6,7 @@
     "appsettings",
     "dotnetcli",
     "Msal",
+    "timeformat",
     "wwwroot"
   ]
 }

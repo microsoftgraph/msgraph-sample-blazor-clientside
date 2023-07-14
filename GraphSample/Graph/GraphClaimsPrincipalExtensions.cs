@@ -34,7 +34,7 @@ namespace GraphSample
         public static string? GetUserGraphPhoto(this ClaimsPrincipal claimsPrincipal)
         {
             var claim = claimsPrincipal.FindFirst(GraphClaimTypes.Photo);
-            return claim == null ? null : claim.Value;
+            return claim?.Value;
         }
 
         public static string GetUserGraphTimeZone(this ClaimsPrincipal claimsPrincipal)
@@ -52,8 +52,7 @@ namespace GraphSample
         // Adds claims from the provided User object
         public static void AddUserGraphInfo(this ClaimsPrincipal claimsPrincipal, User user)
         {
-            var identity = claimsPrincipal.Identity as ClaimsIdentity;
-            if (identity == null)
+            if (claimsPrincipal.Identity is not ClaimsIdentity identity)
             {
                 throw new AuthenticationException(
                     "ClaimsIdentity is null inside provided ClaimsPrincipal");
@@ -76,8 +75,7 @@ namespace GraphSample
         // Converts a photo Stream to a Data URI and stores it in a claim
         public static void AddUserGraphPhoto(this ClaimsPrincipal claimsPrincipal, Stream? photoStream)
         {
-            var identity = claimsPrincipal.Identity as ClaimsIdentity;
-            if (identity == null)
+            if (claimsPrincipal.Identity is not ClaimsIdentity identity)
             {
                 throw new AuthenticationException(
                     "ClaimsIdentity is null inside provided ClaimsPrincipal");
