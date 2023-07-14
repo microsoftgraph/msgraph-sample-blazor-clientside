@@ -16,17 +16,16 @@ namespace GraphSample.Graph
     public class GraphUserAccountFactory
         : AccountClaimsPrincipalFactory<RemoteUserAccount>
     {
-        private readonly IAccessTokenProviderAccessor accessor;
         private readonly ILogger<GraphUserAccountFactory> logger;
 
         private readonly GraphClientFactory clientFactory;
 
-        public GraphUserAccountFactory(IAccessTokenProviderAccessor accessor,
+        public GraphUserAccountFactory(
+            IAccessTokenProviderAccessor accessor,
             GraphClientFactory clientFactory,
             ILogger<GraphUserAccountFactory> logger)
         : base(accessor)
         {
-            this.accessor = accessor;
             this.clientFactory = clientFactory;
             this.logger = logger;
         }
@@ -44,25 +43,23 @@ namespace GraphSample.Graph
                 try
                 {
                     // Add additional info from Graph to the identity
-                    await AddGraphInfoToClaims(accessor, initialUser);
+                    await AddGraphInfoToClaims(initialUser);
                 }
                 catch (AccessTokenNotAvailableException exception)
                 {
-                    logger.LogError($"Graph API access token failure: {exception.Message}");
+                    logger.LogError("Graph API access token failure: {message}", exception.Message);
                 }
                 catch (ServiceException exception)
                 {
-                    logger.LogError($"Graph API error: {exception.Message}");
-                    logger.LogError($"Response body: {exception.RawResponseBody}");
+                    logger.LogError("Graph API error: {message}", exception.Message);
+                    logger.LogError("Response body: {body}", exception.RawResponseBody);
                 }
             }
 
             return initialUser;
         }
 
-        private async Task AddGraphInfoToClaims(
-            IAccessTokenProviderAccessor accessor,
-            ClaimsPrincipal claimsPrincipal)
+        private async Task AddGraphInfoToClaims(ClaimsPrincipal claimsPrincipal)
         {
             var graphClient = clientFactory.GetAuthenticatedClient();
 
@@ -73,14 +70,8 @@ namespace GraphSample.Graph
                 // Request only the properties used to
                 // set claims
                 config.QueryParameters.Select = new [] { "displayName", "mail", "mailboxSettings", "userPrincipalName" };
-            });
-
-            if (user == null)
-            {
-                throw new Exception("Could not retrieve user from Microsoft Graph.");
-            }
-
-            logger.LogInformation($"Got user: {user.DisplayName}");
+            }) ?? throw new Exception("Could not retrieve user from Microsoft Graph.");
+            logger.LogInformation("Got user: {user}", user.DisplayName);
 
             claimsPrincipal.AddUserGraphInfo(user);
 
