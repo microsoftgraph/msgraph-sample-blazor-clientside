@@ -54,7 +54,7 @@ namespace GraphSample
         {
             if (claimsPrincipal.Identity is not ClaimsIdentity identity)
             {
-                throw new AuthenticationException(
+                throw new Exception(
                     "ClaimsIdentity is null inside provided ClaimsPrincipal");
             }
 
@@ -77,7 +77,7 @@ namespace GraphSample
         {
             if (claimsPrincipal.Identity is not ClaimsIdentity identity)
             {
-                throw new AuthenticationException(
+                throw new Exception(
                     "ClaimsIdentity is null inside provided ClaimsPrincipal");
             }
 

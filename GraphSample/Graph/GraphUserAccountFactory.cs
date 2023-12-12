@@ -30,7 +30,7 @@ namespace GraphSample.Graph
             this.logger = logger;
         }
 
-        public async override ValueTask<ClaimsPrincipal?> CreateUserAsync(
+        public async override ValueTask<ClaimsPrincipal> CreateUserAsync(
             RemoteUserAccount account,
             RemoteAuthenticationUserOptions options)
         {
@@ -56,7 +56,7 @@ namespace GraphSample.Graph
                 }
             }
 
-            return initialUser;
+            return initialUser ?? throw new Exception("Could not create user");
         }
 
         private async Task AddGraphInfoToClaims(ClaimsPrincipal claimsPrincipal)
