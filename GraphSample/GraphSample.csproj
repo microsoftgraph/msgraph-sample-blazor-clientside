@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="8.0.13" />
     <PackageReference Include="Microsoft.Graph" Version="5.69.0" />
-    <PackageReference Include="TimeZoneConverter" Version="6.1.0" />
+    <PackageReference Include="TimeZoneConverter" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
